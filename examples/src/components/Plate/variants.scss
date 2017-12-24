@@ -34,10 +34,22 @@
 
 ///
 /// Draggable variant
-.Plate--isDraggable {
-  --shadow-offset: 0;
+.PlateWrapper {
+  --shadow-offset-x: 0;
+  --shadow-offset-y: 0;
+  --plate-scale-x: 1;
+  --plate-scale-y: 1;
+  --bottom-translate-x: 0;
+  --bottom-translate-y: 0;
+  --middle-translate-x: 0;
+  --middle-translate-y: 0;
+  --top-translate-x: 0;
+  --top-translate-y: 0;
+}
 
+.Plate--isDraggable {
   color: get-color(coal, dark);
+  // helps smooth out on some devices: + transform get-duration(faster) linear
   transition: color get-duration(fast) get-easing();
 
   &:focus,
@@ -46,7 +58,9 @@
   }
 
   .PlateShadowWrapper {
-    transform: translateY(var(--shadow-offset));
+    transform: translate3d(
+      var(--shadow-offset-x), var(--shadow-offset-y), 0
+    );
   }
 
   .PlateShadow::before {
@@ -67,6 +81,15 @@
   }
 
   &.Plate--levelBottom {
+    transform: translate3d(
+      var(--bottom-translate-x),
+      var(--bottom-translate-y),
+      0
+    ) scale(
+      var(--plate-scale-x),
+      var(--plate-scale-y)
+    );
+
     &:focus,
     &:hover {
       .PlateContent,
@@ -77,6 +100,15 @@
   }
 
   &.Plate--levelMiddle {
+    transform: translate3d(
+      var(--middle-translate-x),
+      var(--middle-translate-y),
+      0
+    ) scale(
+      var(--plate-scale-x),
+      var(--plate-scale-y)
+    );
+
     &:focus,
     &:hover {
       .PlateContent,
@@ -87,6 +119,15 @@
   }
 
   &.Plate--levelTop {
+    transform: translate3d(
+      var(--top-translate-x),
+      var(--top-translate-y),
+      0
+    ) scale(
+      var(--plate-scale-x),
+      var(--plate-scale-y)
+    );
+
     &:focus,
     &:hover {
       .PlateContent,
@@ -95,22 +136,32 @@
       }
     }
   }
+
+  // would be nice if there was a better way to suppress the creation of the mirror
+  &.draggable-mirror {
+    display: none;
+  }
 }
 
-///
-/// Test
-/*
-.PlateWrapper--test {
-  .Plate--levelTop {
-    transform: translate3d(0, -40%, 0) scale(1, 0.75);
+.draggable-container--placed {
+  .Plate--levelBottom {
+    .PlateContent,
+    .PlateShadow::before {
+      animation-name: jelly-small;
+    }
   }
 
   .Plate--levelMiddle {
-    transform: translate3d(0, -15%, 0) scale(1, 0.75);
+    .PlateContent,
+    .PlateShadow::before {
+      animation-name: jelly-medium;
+    }
   }
 
-  .Plate--levelBottom {
-    transform: translate3d(0, 0%, 0) scale(1, 0.75);
+  .Plate--levelTop {
+    .PlateContent,
+    .PlateShadow::before {
+      animation-name: jelly-big;
+    }
   }
 }
-*/
